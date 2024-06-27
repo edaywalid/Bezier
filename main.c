@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MARKER_SIZE 10.0f
+#define MARKER_SIZE 25.0f
 #define SCREEN_FPS 60
 #define DELAY_SEC (1.0f / SCREEN_FPS)
 #define DELAY_MS ((Uint32)floorf(DELAY_SEC * 1000.0f))
