@@ -125,11 +125,8 @@ int main() {
         ps[ps_selected] = mouse_pos;
       }
     }
-
     const float p = (sinf(time) + 1.0f) * 0.5f;
-    for (size_t i = 0; i < ps_count; i++) {
-      render_marker(ps[i], RED);
-    }
+
     // TODO: : switch between markers and curve at runtime
     if (ps_count >= 4) {
       DrawLineV(ps[0], ps[1], RED);
@@ -139,6 +136,9 @@ int main() {
       } else {
         render_bezier_curve(ps[0], ps[1], ps[2], ps[3], bezier_sample_step);
       }
+    }
+    for (size_t i = 0; i < ps_count; i++) {
+      render_marker(ps[i], RED);
     }
     EndDrawing();
     time += DELAY_SEC;
