@@ -8,7 +8,6 @@
 #define SCREEN_FPS 60
 #define DELAY_SEC (1.0f / SCREEN_FPS)
 #define DELAY_MS ((Uint32)floorf(DELAY_SEC * 1000.0f))
-#define BEZIER_SAMPLE_STEP 0.01f
 // vact2 constructor
 Vector2 vec2_constr(float a, float b) { return (Vector2){a, b}; }
 
@@ -96,11 +95,21 @@ int main() {
   SetTargetFPS(SCREEN_FPS);
   float time = 0.0f;
   int markers = 1;
+  float bezier_sample_step = 0.01f;
   while (!WindowShouldClose()) {
     BeginDrawing();
     ClearBackground(DARKGRAY);
     if (IsKeyPressed(KEY_F1)) {
       markers = !markers;
+    }
+    // TODO: with the mouse wheel adjust the bezier_sample_step
+    // detect the mouse wheel event
+    int wheel = GetMouseWheelMove();
+    if (wheel != 0) {
+      bezier_sample_step += 0.01f * wheel;
+      if (bezier_sample_step < 0.01f) {
+        bezier_sample_step = 0.01f;
+      }
     }
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       Vector2 mouse_pos = GetMousePosition();
@@ -116,6 +125,7 @@ int main() {
         ps[ps_selected] = mouse_pos;
       }
     }
+
     const float p = (sinf(time) + 1.0f) * 0.5f;
     for (size_t i = 0; i < ps_count; i++) {
       render_marker(ps[i], RED);
@@ -125,9 +135,9 @@ int main() {
       DrawLineV(ps[0], ps[1], RED);
       DrawLineV(ps[2], ps[3], RED);
       if (markers) {
-        render_bezier_markers(ps[0], ps[1], ps[2], ps[3], BEZIER_SAMPLE_STEP);
+        render_bezier_markers(ps[0], ps[1], ps[2], ps[3], bezier_sample_step);
       } else {
-        render_bezier_curve(ps[0], ps[1], ps[2], ps[3], BEZIER_SAMPLE_STEP);
+        render_bezier_curve(ps[0], ps[1], ps[2], ps[3], bezier_sample_step);
       }
     }
     EndDrawing();
