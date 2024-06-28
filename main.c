@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MARKER_SIZE 25.0f
 #define SCREEN_FPS 60
@@ -38,26 +39,28 @@ void render_marker(Vector2 position, Color color) {
 }
 // bezier
 
-Vector2 bezier_sample(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float p) {
-  Vector2 ab = lerpv2(a, b, p);
-  Vector2 bc = lerpv2(b, c, p);
-  Vector2 cd = lerpv2(c, d, p);
-  Vector2 abc = lerpv2(ab, bc, p);
-  Vector2 bcd = lerpv2(bc, cd, p);
-  Vector2 abcd = lerpv2(abc, bcd, p);
-  return abcd;
+Vector2 beziern_sample(Vector2 *ps, Vector2 *xs, size_t n, float p) {
+  memcpy(xs, ps, n * sizeof(Vector2));
+  // xs[i] = lerpv2(xs[i], xs[i+1], p);
+  while (n > 1) {
+    for (size_t i = 0; i < n - 1; i++) {
+      xs[i] = lerpv2(xs[i], xs[i + 1], p);
+    }
+    n--;
+  }
+  return xs[0];
 }
-void render_bezier_markers(Vector2 a, Vector2 b, Vector2 c, Vector2 d,
-                           float s) {
+
+void render_bezier_markers(Vector2 *ps, Vector2 *xs, size_t n, float s) {
   for (float p = 0.0f; p <= 1.0f; p += s) {
-    render_marker(bezier_sample(a, b, c, d, p), PURPLE);
+    render_marker(beziern_sample(ps, xs, n, p), PURPLE);
   }
 }
 
-void render_bezier_curve(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float s) {
+void render_bezier_curve(Vector2 *ps, Vector2 *xs, size_t n, float s) {
   for (float p = 0.0f; p + s <= 1.0f; p += s) {
-    Vector2 begin = bezier_sample(a, b, c, d, p);
-    Vector2 end = bezier_sample(a, b, c, d, p + s);
+    Vector2 begin = beziern_sample(ps, xs, n, p);
+    Vector2 end = beziern_sample(ps, xs, n, p + s);
     DrawLineV(begin, end, PURPLE);
   }
 }
@@ -65,6 +68,7 @@ void render_bezier_curve(Vector2 a, Vector2 b, Vector2 c, Vector2 d, float s) {
 
 #define PS_CAPACITY 256
 Vector2 ps[PS_CAPACITY];
+Vector2 xs[PS_CAPACITY];
 size_t ps_count = 0;
 int ps_selected = -1;
 
@@ -113,10 +117,10 @@ int main() {
     }
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
       Vector2 mouse_pos = GetMousePosition();
-      if (ps_count < 4) {
+      ps_selected = ps_at(mouse_pos);
+      if (ps_selected < 0) {
         ps[ps_count++] = vec2_constr(mouse_pos.x, mouse_pos.y);
       } else {
-        ps_selected = ps_at(mouse_pos);
         printf("ps_selected : %d\n", ps_selected);
       }
     } else if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
@@ -128,17 +132,18 @@ int main() {
     const float p = (sinf(time) + 1.0f) * 0.5f;
 
     // TODO: : switch between markers and curve at runtime
-    if (ps_count >= 4) {
-      DrawLineV(ps[0], ps[1], RED);
-      DrawLineV(ps[2], ps[3], RED);
+    if (ps_count >= 1) {
       if (markers) {
-        render_bezier_markers(ps[0], ps[1], ps[2], ps[3], bezier_sample_step);
+        render_bezier_markers(ps, xs, ps_count, bezier_sample_step);
       } else {
-        render_bezier_curve(ps[0], ps[1], ps[2], ps[3], bezier_sample_step);
+        render_bezier_curve(ps, xs, ps_count, bezier_sample_step);
       }
     }
     for (size_t i = 0; i < ps_count; i++) {
       render_marker(ps[i], RED);
+      if (i < ps_count - 1) {
+        DrawLineV(ps[i], ps[i + 1], RED);
+      }
     }
     EndDrawing();
     time += DELAY_SEC;
