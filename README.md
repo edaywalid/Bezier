@@ -10,6 +10,7 @@ This project demonstrates the implementation of Bezier curves in C using the ray
 - [Mathematical Background](#mathematical-background)
 - [Features](#features)
 - [Screenshots](#screenshots)
+- [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
 
@@ -43,24 +44,24 @@ where $t$ is a parameter between 0 and 1, and $P_0, P_1, P_2, P_3$ are the contr
 
 _Bezier curve showing smooth transitions between points._
 
-## Installation
+## Prerequisites
 
-- note :
-  this app only works on linux
+- C compiler (gcc, clang)
+- raylib library (it is included in the repository)
+- make
+- linux (or WSL on Windows) , for other platforms you can use the raylib library and compile the code with the raylib library (https://www.raylib.com/)
+
+## Installation
 
 1. **Clone the repository:**
    ```sh
    git clone https://github.com/edaywalid/Bezier
    cd Bezier
    ```
-2. **Compile the program:**
-   ```sh
-    ./build.sh
-   ```
 
 ## Usage
 
 - **Run the program:**
   ```sh
-  ./bezier_curve
+  make run
   ```
