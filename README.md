@@ -40,9 +40,18 @@ where $t$ is a parameter between 0 and 1, and $P_0, P_1, P_2, P_3$ are the contr
 
 ## Screenshots
 
-![Screenshot 2](screenshots/screenshot1.png)
+![Screenshot 1](screenshots/screenshot1.png)
 
 _Bezier curve showing smooth transitions between points._
+
+![Screenshot 2](screenshots/screenshot2.png)
+![Screenshot 3](screenshots/screenshot3.png)
+
+_click F1 to swtich between the curves._
+
+![Screenshot 4](screenshots/screenshot4.png)
+![Screenshot 5](screenshots/screenshot5.png)
+_with the mouse wheel u can ajust the sample steps._
 
 ## Prerequisites
 
