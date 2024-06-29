@@ -1,4 +1,6 @@
-"""
+# WHAT IS BEZIER CURVE?
+
+- check this video https://youtu.be/aVwxzDHniEw?si=pAiWg5cSHg_x4e_W
 
 # Bezier Curve Implementation with Raylib
 
@@ -51,6 +53,7 @@ _click F1 to swtich between the curves._
 
 ![Screenshot 4](screenshots/screenshot4.png)
 ![Screenshot 5](screenshots/screenshot5.png)
+
 _with the mouse wheel u can ajust the sample steps._
 
 ## Prerequisites
