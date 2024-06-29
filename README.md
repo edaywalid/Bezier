@@ -48,7 +48,6 @@ _Bezier curve showing smooth transitions between points._
 
 - C compiler (gcc, clang)
 - raylib library (it is included in the repository)
-- make
 - linux (or WSL on Windows) , for other platforms you can use the raylib library and compile the code with the raylib library (https://www.raylib.com/)
 
 ## Installation
@@ -63,5 +62,6 @@ _Bezier curve showing smooth transitions between points._
 
 - **Run the program:**
   ```sh
-  make run
+  chmod +x build.sh
+  ./build.sh
   ```
